@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">LocationBasedActions</string>
+    <string name="title_currentActionsList">Action List</string>
+    <string name="title_newAction">New Action</string>
+    <string name="title_settings">Settings</string>
+    <string name="InputAddressHint">Enter the Address</string>
+    <string name="LocationHeading">Location:</string>
+    <string name="GeofenceRequestID">GeoFenceID</string>
+</resources>
