@@ -6,7 +6,6 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.example.locationbasedactions.Fragments.ActionListFragment;
 import android.graphics.Color;
 import android.os.Build;
 
@@ -14,6 +13,8 @@ import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
 
 import androidx.core.app.NotificationCompat;
+
+import java.util.List;
 
 public class GeofenceBroadcastReceiver extends BroadcastReceiver {
     Context context;
@@ -33,10 +34,12 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
 
         // Test that the reported transition was of interest.
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ||
-                geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT || geofenceTransition == Geofence.GEOFENCE_TRANSITION_DWELL) {
+                 geofenceTransition == Geofence.GEOFENCE_TRANSITION_DWELL) {
+
+            List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
 
             String textTitle = "Within Area";
-            String textContent = "You are currently within the preset geofence";
+            String textContent = "You are currently within the preset area";
 
             NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -46,7 +49,7 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
                 nm.createNotificationChannel(insideChannel);
             }
 
-            Intent notifIntent = new Intent(context, ActionListFragment.class);
+            Intent notifIntent = new Intent(context, MainFragment.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notifIntent, 0);
 
@@ -59,21 +62,6 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
                     .setAutoCancel(true);
 
             nm.notify(544, builder.build());
-
-            // Get the geofences that were triggered. A single event can trigger
-            // multiple geofences.
-            //List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
-
-            // Get the transition details as a String.
-//            String geofenceTransitionDetails = getGeofenceTransitionDetails(
-//                    this,
-//                    geofenceTransition,
-//                    triggeringGeofences
-//            );
-
-            // Send notification and log the transition details.
-            //sendNotification(geofenceTransitionDetails);
-
         } else {
             // Log the error.
         }
