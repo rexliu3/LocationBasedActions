@@ -9,10 +9,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 
+import androidx.core.app.NotificationCompat;
+
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
-
-import androidx.core.app.NotificationCompat;
 
 import java.util.List;
 
@@ -54,7 +54,7 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notifIntent, 0);
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "INSIDE_CHANNEL")
-                    .setSmallIcon(R.drawable.ic_notifications_black_24dp)
+                    .setSmallIcon(R.drawable.ic_my_location_black_24dp)
                     .setContentTitle(textTitle)
                     .setContentText(textContent)
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT)

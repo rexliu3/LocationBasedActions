@@ -32,13 +32,13 @@ import java.util.Locale;
 
 public class MainFragment extends Fragment {
     private ImageView mainImage;
+
     private boolean tracking;
-
-    private GeofencingClient geofencingClient;
-
     private String address;
     private int radius;
     private int duration;
+
+    private GeofencingClient geofencingClient;
     private List geofenceList = new ArrayList<Geofence>();
     private PendingIntent geofencePendingIntent;
 
@@ -50,6 +50,9 @@ public class MainFragment extends Fragment {
     private String ADDRESS_KEY = "ADDRESS";
     private String RADIUS_KEY = "RADIUS";
     private String DURATION_KEY = "DURATION";
+    private int disableDrawable = R.drawable.ic_location_disabled_black_24dp;
+    private int enabledDrawable = R.drawable.ic_location_searching_black_24dp;
+
 
     private SharedPreferences sharedPreferences;
 
@@ -83,7 +86,7 @@ public class MainFragment extends Fragment {
                             if (!durationInput.getText().toString().equals("") && Integer.parseInt(durationInput.getText().toString()) > 0) {
                                 duration = Integer.parseInt(durationInput.getText().toString());
                                 tracking = true;
-                                mainImage.setImageResource(R.color.colorPrimary);
+                                mainImage.setImageResource(enabledDrawable);
                                 addressInput.setEnabled(false);
                                 radiusInput.setEnabled(false);
                                 durationInput.setEnabled(false);
@@ -100,7 +103,7 @@ public class MainFragment extends Fragment {
                 } else {
                     tracking = false;
                     stopGeofences();
-                    mainImage.setImageResource(R.drawable.common_google_signin_btn_icon_dark);
+                    mainImage.setImageResource(disableDrawable);
                     addressInput.setEnabled(true);
                     radiusInput.setEnabled(true);
                     durationInput.setEnabled(true);
@@ -154,7 +157,7 @@ public class MainFragment extends Fragment {
         }
 
         if (tracking) {
-            mainImage.setImageResource(R.color.colorPrimary);
+            mainImage.setImageResource(enabledDrawable);
             addressInput.setEnabled(false);
             radiusInput.setEnabled(false);
             durationInput.setEnabled(false);
@@ -163,7 +166,6 @@ public class MainFragment extends Fragment {
             durationInput.setText(Integer.toString(duration));
         }
     }
-
 
     private void setUpGeofence(String address, int radius, int duration) {
         // Set the request ID of the geofence. This is a string to identify this
