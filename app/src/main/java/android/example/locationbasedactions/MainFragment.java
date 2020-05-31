@@ -81,7 +81,7 @@ public class MainFragment extends Fragment {
                 if (!tracking) {
                     if (!addressInput.getText().toString().equals("")) {
                         address = addressInput.getText().toString();
-                        if (!radiusInput.getText().toString().equals("") && Integer.parseInt(radiusInput.getText().toString()) > 0) {
+                        if (!radiusInput.getText().toString().equals("") && Integer.parseInt(radiusInput.getText().toString()) >= 100) {
                             radius = Integer.parseInt(radiusInput.getText().toString());
                             if (!durationInput.getText().toString().equals("") && Integer.parseInt(durationInput.getText().toString()) > 0) {
                                 duration = Integer.parseInt(durationInput.getText().toString());
@@ -92,13 +92,13 @@ public class MainFragment extends Fragment {
                                 durationInput.setEnabled(false);
                                 setUpGeofence(address, radius, duration);
                             } else {
-                                displayToast("Please Enter a Duration");
+                                displayToast("Please Enter a Duration.");
                             }
                         } else {
-                            displayToast("Please Enter a Radius");
+                            displayToast("Please Enter a Radius above 100 meters.");
                         }
                     } else {
-                        displayToast("Please Enter an Address");
+                        displayToast("Please Enter an Address.");
                     }
                 } else {
                     tracking = false;
@@ -133,7 +133,6 @@ public class MainFragment extends Fragment {
         super.onResume();
         if (sharedPreferences.contains(TRACKING_KEY)) {
             tracking = sharedPreferences.getBoolean(TRACKING_KEY, false);
-            displayToast("tracking received");
         } else {
             tracking = false;
         }
@@ -180,7 +179,7 @@ public class MainFragment extends Fragment {
             latitude = address1.getLatitude();
             longitude = address1.getLongitude();
         } catch (Exception e) {
-           displayToast("Input Valid Address");
+            displayToast("Please Input a Valid Address.");
         }
 
         long dur = duration * 60 * 60;
@@ -201,12 +200,12 @@ public class MainFragment extends Fragment {
         geofencingClient.addGeofences(getGeofencingRequest(), getGeofencePendingIntent()).addOnSuccessListener(getActivity(), new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                displayToast("Geofences Successfully Added");
+                displayToast("Geofences Successfully Added. Currently Tracking.");
             }
         }).addOnFailureListener(getActivity(), new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                displayToast("Failed to Add Geofences");
+                displayToast("Failed to Add Geofences. Please Try Again.");
             }
         });
     }
@@ -216,13 +215,13 @@ public class MainFragment extends Fragment {
                 .addOnSuccessListener(getActivity(), new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        displayToast("Geofences Successfully Removed");
+                        displayToast("Geofences Successfully Removed. Tracking has Stopped.");
                     }
                 })
                 .addOnFailureListener(getActivity(), new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        displayToast("Failed to Remove Geofences");
+                        displayToast("Failed to Remove Geofences. Please Try Again.");
                     }
                 });
     }

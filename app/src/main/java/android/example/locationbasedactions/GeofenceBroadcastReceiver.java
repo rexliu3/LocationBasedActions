@@ -38,7 +38,7 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
 
             List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
 
-            String textTitle = "Within Area";
+            String textTitle = "Within Preset Area Notification";
             String textContent = "You are currently within the preset area";
 
             NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
