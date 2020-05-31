@@ -1,13 +1,8 @@
 package android.example.locationbasedactions;
 
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import android.view.MenuItem;
-import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -35,11 +30,13 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.container, nextFrag).commit();
     }
 
-    @Override
+    /*@Override
     public void onRestoreInstanceState(@Nullable Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         // Restore UI state from the savedInstanceState.
         // This bundle has also been passed to onCreate.
+        Toast.makeText(this, "Restore called", Toast.LENGTH_SHORT).show();
+
         if (savedInstanceState != null && savedInstanceState.containsKey(TRACKING_KEY)) {
             tracking = savedInstanceState.getBoolean(TRACKING_KEY, false);
         } else {
@@ -79,6 +76,6 @@ public class MainActivity extends AppCompatActivity {
 
     public int getDuration() {
         return duration;
-    }
+    }*/
 
 }

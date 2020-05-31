@@ -2,7 +2,9 @@ package android.example.locationbasedactions;
 
 import android.annotation.SuppressLint;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -24,15 +26,9 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Locale;
-
-import javax.xml.datatype.Duration;
 
 public class MainFragment extends Fragment {
     private ImageView mainImage;
@@ -46,20 +42,23 @@ public class MainFragment extends Fragment {
     private List geofenceList = new ArrayList<Geofence>();
     private PendingIntent geofencePendingIntent;
 
-    EditText addressInput;
-    EditText radiusInput;
-    EditText durationInput;
+    private EditText addressInput;
+    private EditText radiusInput;
+    private EditText durationInput;
 
-    String TRACKING_KEY = "TRACKING";
-    String ADDRESS_KEY = "ADDRESS";
-    String RADIUS_KEY = "RADIUS";
-    String DURATION_KEY = "DURATION";
+    private String TRACKING_KEY = "TRACKING";
+    private String ADDRESS_KEY = "ADDRESS";
+    private String RADIUS_KEY = "RADIUS";
+    private String DURATION_KEY = "DURATION";
+
+    private SharedPreferences sharedPreferences;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         assert savedInstanceState != null;
         geofencingClient = LocationServices.getGeofencingClient(getContext());
+        sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
     }
 
     @SuppressLint("SetTextI18n")
@@ -68,26 +67,10 @@ public class MainFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_mainpage, container, false);
 
-        mainImage = (ImageView) v.findViewById(R.id.mainImageView);
-        addressInput = (EditText) v.findViewById(R.id.addressInput);
-        radiusInput = (EditText) v.findViewById(R.id.radiusInput);
-        durationInput = (EditText) v.findViewById(R.id.durationInput);
-
-        MainActivity activity = (MainActivity) getActivity();
-        tracking = activity.getTracking();
-        address = activity.getAddress();
-        radius = activity.getRadius();
-        duration = activity.getDuration();
-
-        if (tracking) {
-            mainImage.setImageResource(R.color.colorPrimary);
-            addressInput.setEnabled(false);
-            radiusInput.setEnabled(false);
-            durationInput.setEnabled(false);
-            addressInput.setText(address);
-            radiusInput.setText(Integer.toString(radius));
-            durationInput.setText(Integer.toString(duration));
-        }
+        mainImage = v.findViewById(R.id.mainImageView);
+        addressInput = v.findViewById(R.id.addressInput);
+        radiusInput = v.findViewById(R.id.radiusInput);
+        durationInput = v.findViewById(R.id.durationInput);
 
         mainImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,13 +115,55 @@ public class MainFragment extends Fragment {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putBoolean(TRACKING_KEY, tracking);
-        savedInstanceState.putString(ADDRESS_KEY, address);
-        savedInstanceState.putInt(RADIUS_KEY, radius);
-        savedInstanceState.putInt(DURATION_KEY, duration);
+    public void onPause() {
+        super.onPause();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(TRACKING_KEY, tracking);
+        editor.putString(ADDRESS_KEY, address);
+        editor.putInt(RADIUS_KEY, radius);
+        editor.putInt(DURATION_KEY, duration);
+        editor.commit();
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (sharedPreferences.contains(TRACKING_KEY)) {
+            tracking = sharedPreferences.getBoolean(TRACKING_KEY, false);
+            displayToast("tracking received");
+        } else {
+            tracking = false;
+        }
+
+        if (sharedPreferences.contains(ADDRESS_KEY)) {
+            address = sharedPreferences.getString(ADDRESS_KEY, "");
+        } else {
+            address = "";
+        }
+
+        if (sharedPreferences.contains(RADIUS_KEY)) {
+            radius = sharedPreferences.getInt(RADIUS_KEY, 0);
+        } else {
+            radius = 0;
+        }
+
+        if (sharedPreferences.contains(DURATION_KEY)) {
+            duration = sharedPreferences.getInt(DURATION_KEY, 0);
+        } else {
+            duration = 0;
+        }
+
+        if (tracking) {
+            mainImage.setImageResource(R.color.colorPrimary);
+            addressInput.setEnabled(false);
+            radiusInput.setEnabled(false);
+            durationInput.setEnabled(false);
+            addressInput.setText(address);
+            radiusInput.setText(Integer.toString(radius));
+            durationInput.setText(Integer.toString(duration));
+        }
+    }
+
 
     private void setUpGeofence(String address, int radius, int duration) {
         // Set the request ID of the geofence. This is a string to identify this
@@ -158,7 +183,9 @@ public class MainFragment extends Fragment {
 
         long dur = duration * 60 * 60;
 
-        geofenceList.add(new Geofence.Builder().setRequestId("Main").setCircularRegion(
+        geofenceList.add(new Geofence.Builder()
+                .setRequestId("Main")
+                .setCircularRegion(
                             latitude,
                             longitude,
                             radius
@@ -172,12 +199,12 @@ public class MainFragment extends Fragment {
         geofencingClient.addGeofences(getGeofencingRequest(), getGeofencePendingIntent()).addOnSuccessListener(getActivity(), new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                // Geofences Added
+                displayToast("Geofences Successfully Added");
             }
         }).addOnFailureListener(getActivity(), new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                // Failed to add geofences
+                displayToast("Failed to Add Geofences");
             }
         });
     }
@@ -187,15 +214,13 @@ public class MainFragment extends Fragment {
                 .addOnSuccessListener(getActivity(), new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        // Geofences removed
-                        // ...
+                        displayToast("Geofences Successfully Removed");
                     }
                 })
                 .addOnFailureListener(getActivity(), new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        // Failed to remove geofences
-                        // ...
+                        displayToast("Failed to Remove Geofences");
                     }
                 });
     }
