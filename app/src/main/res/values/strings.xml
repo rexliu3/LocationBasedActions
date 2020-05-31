@@ -1,9 +1,11 @@
 <resources>
     <string name="app_name">LocationBasedActions</string>
-    <string name="title_currentActionsList">Action List</string>
-    <string name="title_newAction">New Action</string>
-    <string name="title_settings">Settings</string>
+    <string name="titleBar">Location Based Notification</string>
+    <string name="AddressTitle">Address:</string>
+    <string name="RadiusTitle">Radius (meters):</string>
+    <string name="DurationTitle">Duration of Check (minutes):</string>
     <string name="InputAddressHint">Enter the Address</string>
-    <string name="LocationHeading">Location:</string>
+    <string name="InputRadiusHint">Enter a Radius above 100 meters</string>
+    <string name="InputDurationHint">Enter Duration of Check</string>
     <string name="GeofenceRequestID">GeoFenceID</string>
 </resources>
