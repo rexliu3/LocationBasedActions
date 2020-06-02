@@ -1,4 +1,4 @@
-package android.example.locationbasedactions;
+package com.rexliu.locationbasedactions;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;

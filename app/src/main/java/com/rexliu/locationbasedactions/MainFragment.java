@@ -1,4 +1,4 @@
-package android.example.locationbasedactions;
+package com.rexliu.locationbasedactions;
 
 import android.annotation.SuppressLint;
 import android.app.PendingIntent;

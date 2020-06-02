@@ -1,4 +1,4 @@
-package android.example.locationbasedactions;
+package com.rexliu.locationbasedactions;
 
 import android.content.Context;
 import android.content.DialogInterface;
