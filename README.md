@@ -35,7 +35,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 <p align="center">
-  <img width="400" height="300" src="images/screenshot.png">
+  <img width="700" height="500" src="images/screenshot.png">
 </p>
 
 Android application that notifies users when they enter a preset region
