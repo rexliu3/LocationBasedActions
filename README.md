@@ -75,7 +75,6 @@ Follow this [Android Guide](https://developer.android.com/training/basics/firsta
 
 <!-- ROADMAP -->
 ## Roadmap
-
 See the [open issues](https://github.com/rexliu3/LocationBasedActions/issues) for a list of proposed features (and known issues).
 
 
