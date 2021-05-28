@@ -38,10 +38,7 @@
   <img width="700" height="500" src="images/screenshot.png">
 </p>
 
-Android application that notifies users when they enter a preset region
-* Designed application that sends notifications when user enters pre-set radiuses
-* Implemented geofences to track user location near a center address
-* Created user-interface to input address, radius, and duration
+Android application that notifies users via notifications when user enters pre-set radiuses. Implemented geofences to track user location near a center address and created user-interface to input address, radius, and duration
 
 ### Built With
 * [Java](https://www.java.com/en/)
